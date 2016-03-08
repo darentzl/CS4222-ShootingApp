@@ -33,9 +33,9 @@ import android.util.Log;
    @author     Kartik Sankaran
    @date       21st Dec 2015
  */
-public class ShootingAppActivity 
-    extends Activity 
-    implements SensorEventListener , 
+public class ShootingAppActivity
+    extends Activity
+    implements SensorEventListener ,
                SoundPool.OnLoadCompleteListener {
 
     /** Called when the activity is first created. */
@@ -135,7 +135,7 @@ public class ShootingAppActivity
     }
 
     /** Initialises the linear accl and gravity sensors. */
-    private void initSensors() 
+    private void initSensors()
         throws Exception {
 
         // Get an instance of the SensorManager
@@ -175,10 +175,10 @@ public class ShootingAppActivity
 
         // Start sampling the sensors
         sensorManager.registerListener( this ,                              // Listener
-                                        acclSensor ,                        // Sensor to measure 
+                                        acclSensor ,                        // Sensor to measure
                                         SensorManager.SENSOR_DELAY_GAME );  // Measurement interval (microsec)
         sensorManager.registerListener( this ,                              // Listener
-                                        gravitySensor ,                     // Sensor to measure 
+                                        gravitySensor ,                     // Sensor to measure
                                         SensorManager.SENSOR_DELAY_GAME );  // Measurement interval (microsec)
         sensorManager.registerListener( this,
                                         magneticSensor ,
@@ -214,7 +214,7 @@ public class ShootingAppActivity
         }
 
         // PA3: Detect the shooting direction and region.
-        //  Think about what sensor or sensors on the phone can 
+        //  Think about what sensor or sensors on the phone can
         //  help you do this.
         detectShootingDirectionAndRegion(event);
     }
@@ -222,11 +222,11 @@ public class ShootingAppActivity
     /** Process the gravity sensor. */
     private void processGravityValues( SensorEvent event ) {
 
-        // Use the gravity sensor to detect whether the phone is 
+        // Use the gravity sensor to detect whether the phone is
         //  face up and nearly parallel to the ground.
         // When the phone is in this position, the gravity should be
         //  (0 , 0 , g). Otherwise, it is at an angle to the ground,
-        //  which can be calculated as the angle between the sampled 
+        //  which can be calculated as the angle between the sampled
         //  gravity vector and the (0 , 0 , 1) phone's z-axis.
 
         // Store the gravity readings
@@ -236,19 +236,19 @@ public class ShootingAppActivity
         float[] zaxis = new float[] { 0.0F , 0.0F , 1.0F };
 
         // Calculate the angle between z-axis and gravity sensor vector.
-        // NOTE: This calculation can be easily optimized since there 
+        // NOTE: This calculation can be easily optimized since there
         //       are 0s and 1s, but is shown here in full for clarity.
         // Use Dot product formula to find angle between two vectors.
         float[] v1 = zaxis , v2 = gravityValues;
-        float dotProduct = 
-            v1[0] * v2[0] + 
-            v1[1] * v2[1] + 
+        float dotProduct =
+            v1[0] * v2[0] +
+            v1[1] * v2[1] +
             v1[2] * v2[2];
-        float mag1 = (float) Math.sqrt( v1[0] * v1[0] + 
-                                        v1[1] * v1[1] + 
+        float mag1 = (float) Math.sqrt( v1[0] * v1[0] +
+                                        v1[1] * v1[1] +
                                         v1[2] * v1[2] );
-        float mag2 = (float) Math.sqrt( v2[0] * v2[0] + 
-                                        v2[1] * v2[1] + 
+        float mag2 = (float) Math.sqrt( v2[0] * v2[0] +
+                                        v2[1] * v2[1] +
                                         v2[2] * v2[2] );
         float cosValue = dotProduct / ( mag1 * mag2 );
         // Clamp the cos value to [-1,1]
@@ -275,11 +275,11 @@ public class ShootingAppActivity
         if( currentTime - lastPhoneAngleTime > MAX_UPDATE_INTERVAL_PHONE_ANGLE ) {
 
             // Update the text view
-            textView_Gravity.setText ( "\nGravity Sensor" + 
-                                       "\nX: " + gravityValues[0] + 
-                                       "\nY: " + gravityValues[1] + 
-                                       "\nZ: " + gravityValues[2] + 
-                                       "\nAngle of phone with horizontal plane: " + angle + " degrees" + 
+            textView_Gravity.setText ( "\nGravity Sensor" +
+                                       "\nX: " + gravityValues[0] +
+                                       "\nY: " + gravityValues[1] +
+                                       "\nZ: " + gravityValues[2] +
+                                       "\nAngle of phone with horizontal plane: " + angle + " degrees" +
                                        "\nIs phone face up?: " + isFaceUp );
             textView_PhoneFaceUp.setText( "\nIs phone face up?: " + isFaceUp );
 
@@ -292,7 +292,7 @@ public class ShootingAppActivity
     private void detectShootingDirectionAndRegion( SensorEvent event ) {
 
         // PA3: Detect the shooting direction and region.
-        //  Think about what sensor or sensors on the phone can 
+        //  Think about what sensor or sensors on the phone can
         //  help you do this.
         switch(event.sensor.getType()) {
 
@@ -311,14 +311,14 @@ public class ShootingAppActivity
         }
 
         // PA3: After you have detected the shooting region, assign the
-        //  region number (in the range 1 to 8) to the member variable 
+        //  region number (in the range 1 to 8) to the member variable
         //  'shootingRegion', and the shooting direction (in the range
-        //  0 to 360 deg) to the member variable 'shootingDirection', 
+        //  0 to 360 deg) to the member variable 'shootingDirection',
         //  both variables are defined at the end of the Java code.
-        // The processAcclValues() method produces the gunshot sound 
+        // The processAcclValues() method produces the gunshot sound
         //  based on the value of 'shootingRegion' (which is set to 1
         //  by default).
-        // Also, display the shooting direction and the shooting region 
+        // Also, display the shooting direction and the shooting region
         //  in the text view below.
 
         // Update the GUI (at a slower rate easy for the user to see on screen)
@@ -326,7 +326,7 @@ public class ShootingAppActivity
         if( currentTime - lastPhoneDirectionTime > MAX_UPDATE_INTERVAL_PHONE_DIRECTION ) {
 
             // Update the text view
-            textView_PhoneShootingRegion.setText( "\nShooting direction: " + shootingDirection + " degrees" + 
+            textView_PhoneShootingRegion.setText( "\nShooting direction: " + shootingDirection + " degrees" +
                                                   "\nShooting region: " + shootingRegion );
 
             // Set the last GUI update time
@@ -360,25 +360,7 @@ public class ShootingAppActivity
     }
 
     private int getRegion(float x) {
-        int region=0;
-        if( x>=0 && x<45 ) {
-            region= 1;
-        } else if ( x>=45 && x<90 ) {
-            region= 2;
-        } else if ( x>=90 && x<135 ) {
-            region= 3;
-        } else if ( x>=135 && x<180 ) {
-            region= 4;
-        } else if ( x>=180 && x<225 ) {
-            region= 5;
-        } else if ( x>=225 && x<270 ) {
-            region= 6;
-        } else if ( x>=270 && x<315 ) {
-            region= 7;
-        } else if ( x>=315 && x<360 ) {
-            region= 8;
-        }
-        return region;
+        return ((int)x) % 45;
     }
 
     /** Process the linear accl sensor. */
@@ -394,25 +376,25 @@ public class ShootingAppActivity
         }
 
         // We use only the accl's z-axis (of the phone's co-ordinate system).
-        // You can visualize accl data using the Sensor Kinetics app in 
+        // You can visualize accl data using the Sensor Kinetics app in
         //  the Google play store.
         float zAccl = event.values[2];
 
         // NOTE: Smoothing may not be required for linear accl since it
         //  is typically a processed sensor. If not, then a bit of smoothing
         //  will be required to remove erroneous accl peaks. Note that smoothing
-        //  would increase the latency, so too much smoothing is also not 
+        //  would increase the latency, so too much smoothing is also not
         //  advisable.
 
         // Here we are using a simple ad-hoc technique utilizing two thresholds
         //  for gesture detection.
-        //  More advanced approaches include machine learning and dynamic time 
+        //  More advanced approaches include machine learning and dynamic time
         //  warping for gesture recognition.
 
         // Check if the force exerted by the accl is large enough.
-        // The thresholds used below should normally be based on data collected 
-        //  from different users performing the gesture, but for this assignment, 
-        //  you can manually set thresholds that work reasonably ok for your 
+        // The thresholds used below should normally be based on data collected
+        //  from different users performing the gesture, but for this assignment,
+        //  you can manually set thresholds that work reasonably ok for your
         //  phone.
         if( zAccl >= MIN_ACCL_FORCE ) {
 
@@ -423,13 +405,13 @@ public class ShootingAppActivity
                 ++numGestures;
                 isAcclInPeakZone = true;
 
-                // Play gunshot sound according to 
+                // Play gunshot sound according to
                 //  the user's shooting direction (region).
                 // If there are more shooting regions than gun types, then
                 //  repeat gun types in more than one shooting region. Note
                 //  that the shootingRegions are numbered from 1, and sound
                 //  numbers are numbered from 0.
-                int soundNumber = ( ( shootingRegion - 1 ) % soundResourceList.length );
+                int soundNumber = ( ( shootingRegion ) % soundResourceList.length );
                 playSound( soundNumber );
             }
         }
@@ -450,10 +432,10 @@ public class ShootingAppActivity
         if( currentTime - lastPhoneGestureTime > MAX_UPDATE_INTERVAL_PHONE_GESTURE ) {
 
             // Update the text view
-            textView_Accl.setText ( "\nLinear Accelerometer Sensor" + 
-                                    "\nX: " + acclValues[0] + 
-                                    "\nY: " + acclValues[1] + 
-                                    "\nZ: " + acclValues[2] + 
+            textView_Accl.setText ( "\nLinear Accelerometer Sensor" +
+                                    "\nX: " + acclValues[0] +
+                                    "\nY: " + acclValues[1] +
+                                    "\nZ: " + acclValues[2] +
                                     "\nNumber of gestures: " + numGestures );
             textView_PhoneGesture.setText( "\nNumber of gestures: " + numGestures );
 
@@ -511,8 +493,8 @@ public class ShootingAppActivity
 
     /** Called when a sound file has been loaded. */
     @Override
-    public void onLoadComplete( SoundPool pool , 
-                                int sampleID , 
+    public void onLoadComplete( SoundPool pool ,
+                                int sampleID ,
                                 int status ) {
 
         // Check if the load was OK
@@ -552,11 +534,11 @@ public class ShootingAppActivity
         int priority = 1;
         int noLoop = 0;
         float normalPlaybackRate = 1.0F;
-        soundPool.play( streamID , 
-                        leftVolume , 
-                        rightVolume , 
-                        priority , 
-                        noLoop , 
+        soundPool.play( streamID ,
+                        leftVolume ,
+                        rightVolume ,
+                        priority ,
+                        noLoop ,
                         normalPlaybackRate );
     }
 
@@ -567,8 +549,8 @@ public class ShootingAppActivity
         handler.post( new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText ( getApplicationContext() , 
-                                     toastMessage , 
+                    Toast.makeText ( getApplicationContext() ,
+                                     toastMessage ,
                                      Toast.LENGTH_SHORT ).show();
                 }
             } );
@@ -646,14 +628,14 @@ public class ShootingAppActivity
     /** List of sound stream IDs. */
     private ArrayList< Integer > soundStreamIdList;
     /** List of sound files resource IDs in the /res/raw resource folder. */
-    private static final int[] soundResourceList = 
-        new int[] { R.raw.rifle , 
-                    R.raw.missile1 , 
-                    R.raw.handgun , 
-                    R.raw.machinegun , 
-                    R.raw.torpedo , 
-                    R.raw.rocket1 , 
-                    R.raw.rifle2 , 
+    private static final int[] soundResourceList =
+        new int[] { R.raw.rifle ,
+                    R.raw.missile1 ,
+                    R.raw.handgun ,
+                    R.raw.machinegun ,
+                    R.raw.torpedo ,
+                    R.raw.rocket1 ,
+                    R.raw.rifle2 ,
                     R.raw.weirdmachinegun };
     /** Flag to indicate whether all the sound files are loaded. */
     private boolean areSoundsLoaded;
