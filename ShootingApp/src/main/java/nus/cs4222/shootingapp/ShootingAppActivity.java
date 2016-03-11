@@ -337,16 +337,14 @@ public class ShootingAppActivity
     private float getDirection() {
         float[] temp = new float[9];
         float[] R = new float[9];
-        //Load rotation matrix into R
+
         SensorManager.getRotationMatrix(temp, null,
                 mGravity, mMagnetic);
 
-        //Remap to camera's point-of-view
         SensorManager.remapCoordinateSystem(temp,
                 SensorManager.AXIS_X,
                 SensorManager.AXIS_Z, R);
 
-        //Return the orientation values
         float[] values = new float[3];
         SensorManager.getOrientation(R, values);
 
@@ -360,7 +358,7 @@ public class ShootingAppActivity
     }
 
     private int getRegion(float x) {
-        return ((int)x) % 45;
+        return (((int)x/45) % 8)+1;
     }
 
     /** Process the linear accl sensor. */
@@ -411,7 +409,7 @@ public class ShootingAppActivity
                 //  repeat gun types in more than one shooting region. Note
                 //  that the shootingRegions are numbered from 1, and sound
                 //  numbers are numbered from 0.
-                int soundNumber = ( ( shootingRegion ) % soundResourceList.length );
+                int soundNumber = ( ( shootingRegion-1 ) % soundResourceList.length );
                 playSound( soundNumber );
             }
         }
